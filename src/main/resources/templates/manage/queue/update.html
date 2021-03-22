@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Update Queue</title>
+    <meta charset="UTF-8">
+
+    <th:block th:replace="fragments/sourcebundle.html :: mdbootstrap" />
+</head>
+<body>
+    <div th:replace="fragments/layout.html :: navbar"></div>
+	
+	<form class="text-center border border-light p-5" method="post" th:action="@{/manage/queue/update}" th:object="${queue}">
+	
+	    <p class="h4 mb-4">New Queue</p>
+	    
+	    <input type="hidden" th:field="*{id}">
+		<input type="hidden" th:field="*{branch}">
+		<input type="hidden" th:field="*{state}">
+	
+	    <div class="form-row mb-4">
+	        <div class="col form-group">
+	        	<label class="form-label" for="queueName">Queue name</label>
+	            <input type="text" id="queueName" class="form-control" th:field="*{name}" required>
+	            <p class="text-danger text-left" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>            
+	        </div>
+	        
+	        <div class="col form-group">
+	        	<label class="form-label" for="branch">Branch</label>
+	        	<input type="text" id="branch" class="form-control" th:field="*{branch.name}" readonly disabled>
+	        	<p class="text-danger text-left" th:if="${#fields.hasErrors('branch')}" th:errors="*{branch}"></p>            
+	        </div>	        
+	    </div>
+	    
+	    <div class="form-row mb-4">
+	        
+	        <div class="col form-group">
+	        	<label class="form-label" for="description">Description</label>
+	            <input type="text" id="description" class="form-control" th:field="*{description}" required>
+	            <p class="text-danger text-left" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+	        </div>
+	        
+	        <div class="col form-group">
+	        	<label class="form-label" for="timePerClient">Time Per Client (min)</label>
+	            <input type="number" id="timePerClient" class="form-control" th:field="*{timePerClient}" min="0" max="300" required>
+	            <p class="text-danger text-left" th:if="${#fields.hasErrors('timePerClient')}" th:errors="*{timePerClient}"></p>
+	        </div>
+	        
+	    </div>
+	    
+	    <div class="form-row mb-4">
+	        <div class="col form-group">
+	        	<label class="form-label" for="notificationDelay">Notification Delay (min)</label>
+	            <input type="number" id="notificationDelay" class="form-control" th:field="*{notificationDelay}" min="0" max="300" required>
+	            <p class="text-danger text-left" th:if="${#fields.hasErrors('notificationDelay')}" th:errors="*{notificationDelay}"></p>
+	        </div>
+	        
+	        <div class="col form-group">
+	        	<label class="form-label" for="notifyAt">Notify At (position)</label>
+	            <input type="number" id="notifyAt" class="form-control" th:field="*{notificationPosition}" min="1" max="1000" required>
+	            <p class="text-danger text-left" th:if="${#fields.hasErrors('notificationPosition')}" th:errors="*{notificationPosition}"></p>
+	        </div>	        
+	    </div>   
+	    
+	    <button class="btn btn-info my-4 btn-block" type="submit">Submit</button>
+	
+	</form>	
+
+
+    <div th:replace="fragments/layout.html :: footer"></div>
+</body>
+</html>

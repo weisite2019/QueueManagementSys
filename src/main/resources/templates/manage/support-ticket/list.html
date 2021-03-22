@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<title>Support Ticket List</title>
+	<meta charset="UTF-8">
+	
+	<th:block th:replace="fragments/sourcebundle.html :: mdbootstrap" />
+
+	<th:block th:replace="fragments/sourcebundle.html :: mdbootstrap-table" />
+
+</head>
+<body>
+	<div th:replace="fragments/layout.html :: navbar"></div>
+
+	<div class="m-4">
+
+		<h1 class="font-weight-bold">Support Ticket List</h1>
+
+		<table id="dataTable" class="table table-striped">
+			<thead>
+				<tr class="row">
+					<th class="col">Title</th>
+					<th class="col">Ticket State</th>
+					<th class="col">Actions</th>
+				</tr>
+			</thead>
+			<tbody th:each="ticket : ${tickets}" th:remove="tag">
+				<tr class="row">
+					<td class="col" th:text="${ticket.title}"></td>
+					<td class="col" th:text="${ticket.ticketState.getDisplayValue()}"></td>
+					<td class="col">
+					<span data-toggle="tooltip" data-placement="top" title="View Support Ticket"><i class="fas fa-eye fa-lg clickable" data-toggle="modal" th:data-target="${'#viewTicket' + ticket.id}"></i></span>
+					<div class="modal fade" th:id="${'viewTicket' + ticket.id}" tabindex="-1" role="dialog" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="modalTitle" th:text="${ticket.title}"></h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body" th:text="${'Question: ' + ticket.description}"></div>
+								<div th:if="${ticket.response != null}" class="modal-body" th:text="${'Response: ' + ticket.response}"></div>
+								<div class="modal-footer">
+							        <button type="button" class="btn btn-mdb-color btn-sm" data-dismiss="modal">Cancel</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<a th:if="${ticket.ticketState.getDisplayValue() == 'Open'}" th:href="@{/manage/support-ticket/reply/__${ticket.id}__}">
+							<i class="fas fa-reply fa-lg" data-toggle="tooltip" data-placement="top" title="Reply"></i>
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+
+	<div th:replace="fragments/layout.html :: footer"></div>
+</body>
+</html>

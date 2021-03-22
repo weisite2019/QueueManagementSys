@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>qMe - Home</title>
+    <th:block th:replace="fragments/sourcebundle.html :: mdbootstrap" />
+</head>
+<body>
+    <div th:replace="fragments/layout.html :: mobile-navbar-modal"></div>
+
+    <div class="m-4">
+
+        <form th:action="@{/search}" method="get">
+            <div class="input-group mb-4">
+                <input type="text" class="form-control" placeholder="Find queue" aria-label="Search" name="query">
+                <div class="input-group-append">
+                    <button class="btn btn-cyan m-0 px-3 py-2 rounded-right z-depth-0 waves-effect" type="submit">
+                        <i class="fas fa-search text-white fa-lg" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <h5 class="text-center font-weight-bold mb-4">Can't find your queue? Try these!</h5>
+
+        <div class="row row-cols-3 justify-content-center">
+            <a th:each="category : ${categories}" th:href="@{/search?category={category}(category=${category.displayValue})}">
+                <div class="col px-2 border border-info">
+                	<div class="mt-1 text-center"><i class="fas fa-3x" th:classappend="${category.iconClass}"></i></div>
+                    <div class="text-center text-truncate"><span class="p text-muted" th:text="${category.displayValue}"></span></div>
+                </div>
+            </a>
+        </div>
+
+    </div>
+</body>
+</html>

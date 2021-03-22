@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>qMe - Branch Operator</title>
+    <th:block th:replace="fragments/sourcebundle.html :: mdbootstrap" />
+    <th:block th:replace="fragments/sourcebundle.html :: mdbootstrap-table" />
+
+    <style>
+        .clickable {
+            cursor: pointer;
+        }
+    </style>
+
+    <script type="text/javascript">
+        var obj = document.getElementById("selectedQueuePageTable");
+        var rowNum = obj.rows.length;
+
+        try{
+            for(var i=1;i<rowNum;i++){
+                obj.rows[i].cells[1].innerHTML = (i).toString();
+            }
+        }
+        catch(e)
+        {
+            alert(e.description);
+        }
+    </script>
+
+
+</head>
+<body>
+
+<div th:replace="fragments/layout.html :: navbar"></div>
+
+<div class="m-4">
+  
+<p><b>Vendor: </b><span th:text="${vendor.getName()}">vendor</span></p>
+<p><b>Branch: </b><span th:text="${branch.getName()}">branch</span></p>
+<p><b>Queue: </b><span th:text="${queue.getName()}">queue</span></p>
+<p><b>Status: </b><span th:text="${queue.getState().getDisplayValue()}">Closed</span></p>
+
+<form method="get" th:action="@{/operate-queue/view-no-show-list/{qId}(qId=${queue.getId()})}" >
+    <input type="submit" value="View No-show List" />
+</form>
+
+<table id="selectedQueuePageTable" class="table table-striped table-bordered">
+    <thead>
+    <tr>
+        <td >Queue Number</td>
+        <td >Position</td>
+        <td >Rejoined?</th>
+        <td ></td>
+        <td ></td>
+    </tr>
+    </thead>
+    <tbody th:each="position:${positions}">
+    <tr >
+        <td ><span th:text="${position.getQueueNumber()}">QueueNumber</span></td>
+        <td ><span >postion</span></td>
+        <td ><span th:if="${position.getState().ordinal()==1}">Yes</span><span th:if="${position.getState().ordinal()!=1}">No</span></td>
+        <td >
+            <form method="get" th:action="@{/operate-queue/view-selected-queue/{qId}/{rId}(qId=${queue.getId()},rId=${position.getId()})}" >
+                <input type="submit" value="Reassign Position" />
+            </form>
+        </td>
+        <td >
+            <form method="get" th:action="@{/operate-queue/view-selected-queue/cancel-reassign/{qId}/{rId}(qId=${queue.getId()},rId=${position.getId()})}" >
+                <input type="submit" value="Cancel Reassignment" />
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</div>
+
+
+<div th:replace="fragments/layout.html :: footer"></div>
+</body>
+</html>
